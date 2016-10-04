@@ -16,3 +16,14 @@ wp-content/plugins/hello.php
 /sitemap.xml
 /sitemap.xml.gz
 
+# SASS Cache
+.sass-cache/*
+ 
+# Other files
+.log
+.DS_Store
+_*
+_compiled/*
+*~
+*.bak
+[tT]humbs.db
