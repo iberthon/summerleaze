@@ -1,13 +1,5 @@
 <?php
 /*
-
-Theme Name: The Hood Arms
-Author: Ian Berthon
-Version: 3.2
-License: GNU General Public License v2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Author URI: http://www.summerleaze.biz
-
 Copyright 2014 Ian Berthon (email: ian@summerleaze.biz)
 
 This program is free software; you can redistribute it and/or

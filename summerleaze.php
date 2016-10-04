@@ -3,7 +3,7 @@
 Plugin Name: Summerleaze Functions
 Plugin URI: http://www.summerleaze.biz/wp-Plugin
 Description: Useful functions shared by Summerleaze themes
-Version: 1.5.5
+Version: 1.5.6
 Author: Ian Berthon
 Author URI: http://www.summerleaze.biz
 
@@ -61,6 +61,7 @@ v1.5.2  2016-05-10 Added sl_load_page_script function
 v1.5.3  2016-05-24 Various bug fixes
 v1.5.4	2016-06-14 Added asynchronous/deferred script loading
 v1.5.5	2016-07-22 Changed [box] shortcode to use <blockquote>
+v1.5.6	2016-09-26 Changed Headings test to Fonts test - added a normal paragraph, ordered & unorderd lists
 */
 
 require_once('shortcode-link.php');
@@ -263,7 +264,7 @@ function sl_post_footer() {
 			echo '</span>';
 		}
 
-		//$tags_list = get_the_tag_list( '', __( ', ', THEME_DOMAIN ) );
+		$tags_list = get_the_tag_list();
 		if ( $tags_list ) {
 			if ( $show_sep ) {
 				echo '<span class="sep"> | </span>';
@@ -498,19 +499,34 @@ function sl_list_shortcode_handler($atts, $content = null) {
 }
 add_shortcode('list', 'sl_list_shortcode_handler');
 
-function sl_headings_test_shortcode_handler($atts, $content = null) {
+function sl_fonts_test_shortcode_handler($atts, $content = null) {
 	extract( shortcode_atts( array(
-		'class' => 'blueBox',
+		'class' => '',
 	), $atts ) );
 
-	$output = '';
+	$html = '';
 	$text = do_shortcode($content);
 	for($i = 1; $i <= 6; $i++) {
-		$output .= sprintf('<h%d>Heading #%d: %s</h%d>', $i, $i, $text, $i);
+		$html .= sprintf('<h%d>Heading #%d', $i, $i) . (empty($text) ? '' : ': ' . $text) . sprintf('</h%d>', $i);
 	}
-	return $output;
+	
+	$html .= '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at tempor neque. Nam bibendum risus porta, vestibulum lectus in, tristique nibh. Duis feugiat massa hendrerit quam viverra egestas. Pellentesque ac massa dictum quam mollis molestie. In magna massa, aliquam at pretium at, pellentesque tristique ex.</p>';
+	
+	$html .= '<ul>';
+	for($i = 1; $i <= 5; $i++) {
+		$html .= sprintf('<li>List Item #%d</li>', $i);
+	}
+	$html .= '</ul>';
+
+	$html .= '<ol>';
+	for($i = 1; $i <= 5; $i++) {
+		$html .= sprintf('<li>List Item #%d</li>', $i);
+	}
+	$html .= '</ol>';
+	
+	return $html;
 }
-add_shortcode('sl-headings', 'sl_headings_test_shortcode_handler');
+add_shortcode('sl-fonts-test', 'sl_fonts_test_shortcode_handler');
 
 function sl_flex_shortcode_handler($atts = array(), $content = null) {
 	extract( shortcode_atts( array(

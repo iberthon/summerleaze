@@ -262,7 +262,7 @@ class Link_Shortcode {
 			$title = $image->post_title;
 		}
 
-		$html = sl_image_filter('', $image->ID, $caption, $title, $align, $url, '', $title);
+		$html = sl_image_filter($html, $image->ID, $caption, $title, $align, $url, '', $title);
 
 		return $html;
 	}
