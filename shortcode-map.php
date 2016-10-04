@@ -50,8 +50,6 @@ class Map_Shortcode {
 			'id'     	=> 'map',
 			'lat'    	=> '50.062635',
 			'lon'   	=> '-5.56421',
-			'mlat'		=> '',
-			'mlon'		=> '',
 			'pins'		=> '',
 			'title' 	=> 'Lamorna Cove',
 			'zoom'  	=> 12,
@@ -59,7 +57,7 @@ class Map_Shortcode {
 
 		$output = '';
 		$output .= sprintf('<div id="%s-container">', $id);
-		$output .= sprintf('	<div id="%s" class="map" data-lat="%s" data-lon="%s" data-mlat="%s" data-mlon="%s" data-pins="%s" data-height="%s" data-title="%s" data-zoom="%s"></div>', $id, $lat, $lon, $mlat, $mlon, $pins, $height, $title, $zoom);
+		$output .= sprintf('	<div id="%s" class="map" data-lat="%s" data-lon="%s" data-pins="%s" data-height="%s" data-title="%s" data-zoom="%s"></div>', $id, $lat, $lon, $pins, $height, $title, $zoom);
 		$output .= '	<div class="mapContent">' . do_shortcode($content) . '</div>';
 		$output .= '</div>';
 
@@ -67,7 +65,7 @@ class Map_Shortcode {
 	}
 
 	static function register_script() {
-		wp_register_script('google-maps', "http://maps.google.com/maps/api/js?key=AIzaSyA5ctQ0z_-sYAReYXQcZHDtlOC4y6G1SZ4", '', '1.0', true);
+		wp_register_script('google-maps', "https://maps.google.com/maps/api/js?key=AIzaSyA5ctQ0z_-sYAReYXQcZHDtlOC4y6G1SZ4", '', '1.0', true);
 		wp_register_script('map-script', plugins_url('/js/map-script.js', __FILE__), array('jquery'), '1.0', true);
 	}
 
