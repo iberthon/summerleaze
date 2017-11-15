@@ -89,10 +89,10 @@ class Slider_Shortcode {
 			list($from, $to, $time) = explode('|', $image->alttext);
 
 			if(empty($from)) {
-				$from = '50% 50% 1x';
+				$from = '0% 0% 1x';
 			}
 			if(empty($to)) {
-				$to = '50% 50% 1x';
+				$to = '100% 100% 1x';
 			}
 			if(empty($time)) {
 				$time = $delay;
@@ -129,6 +129,10 @@ class Slider_Shortcode {
 			//DumpVar($name, $caption, $from, $to, $time, $image);
 	  	$href = wp_get_attachment_url($image->ID);
 
+			$from = empty($from) ? '0% 0% 1x' : $from;
+			$to   = empty($to) ? '100% 100% 1x' : $to;
+			$time = empty($time) ? '30' : $time;
+			
   		$result .= sprintf('		<img src="%s" data-from="%s" data-to="%s" data-time="%s" alt="%s" />', $href, $from, $to, $time, $caption);
 		}
 		return $result;
@@ -180,16 +184,16 @@ class Slider_Shortcode {
 	}
 
 	static function register_script() {
-		wp_register_script('easing-lib', sl_relative_url('js/jquery.easing-1.3.pack.js', __FILE__), '', '1.0', true);
-		wp_register_script('slider-lib', sl_relative_url('js/jquery.cross-slide.js', __FILE__), '', '1.0', true);
-		wp_register_script('slider-script', sl_relative_url('js/start-slider.js', __FILE__), '', '1.0', true);
+		wp_register_script('easing-lib', plugins_url('js/jquery.easing-1.3.pack.js', __FILE__), '', '1.0', true);
+		wp_register_script('cross-slider-lib', plugins_url('js/jquery.cross-slide.js', __FILE__), '', '1.0', true);
+		wp_register_script('cross-slider-script', plugins_url('js/start-slider.js', __FILE__), '', '1.0', true);
 	}
 
 	static function print_script() {
 		if (self::$add_script) {
 			wp_print_scripts('easing-lib');
-			wp_print_scripts('slider-lib');
-			wp_print_scripts('slider-script');
+			wp_print_scripts('cross-slider-lib');
+			wp_print_scripts('cross-slider-script');
 		}
 	}
 }

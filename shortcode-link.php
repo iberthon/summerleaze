@@ -239,31 +239,57 @@ class Link_Shortcode {
 	static function handle_media_shortcode($atts, $content = null) {
 		extract( shortcode_atts( array(
 			'align'					=> '',
+			'alt'						=> '',
+			'class'  				=> '',
 			'name'					=> '',
-			'size'					=> '',
 			'link'					=> false,
 			'show_caption'	=> false,
 			'show_title' 		=> false,
+			'size'					=> '',
+			'title'					=> '',
 		), $atts ) );
 
 		$image = self::get_media($name);
-
-  	$url = '';
-  	if($link) {
-  		$url = wp_get_attachment_url($image->ID);
-  	}
+		$src = wp_get_attachment_url($image->ID);
 
 		$caption = '';
 		if($show_caption) {
 			$caption = $image->post_excerpt;
+			$lines = preg_split ('/$\R?^/m', $caption);
+			$caption = join('<br />', $lines);
 		}
-		$title = '';
-		if($show_title) {
+		if(empty($title)) {
 			$title = $image->post_title;
+			if(empty($title)) {
+				$title = get_the_title($id); // $title always seems to be blank (bug in WP?) so get it from $id
+			}
+		}
+		if(empty($alt)) {
+			$alt = $title;
+		}
+		if($show_title) {
+			if(!empty($title)) {
+				$title = sprintf(' title="%s"', $title);
+			}
+		}
+		else {
+			$title = '';
+		}
+		// Don't display title or caption...
+		$no_caption = stripos($size, '-no-caption');
+		if($no_caption !== false || $size == 'thumbnail') {
+			$size = substr($size, 0, $no_caption);
+			$caption = '';
+			$title = '';
 		}
 
-		$html = sl_image_filter($html, $image->ID, $caption, $title, $align, $url, '', $title);
+		//$classes = array_merge(array('flex-item'), explode(' ', $class));
+		$classes = explode(' ', $class);
+		if(!empty($classes)) {
+			$class = sprintf(' class="%s"', join(' ', $classes));
+		}
 
+		$html = sprintf('<img%s src="%s"%s alt="%s" />', $class, $src, $title, $alt);
 		return $html;
 	}
 

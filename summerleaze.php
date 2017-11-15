@@ -67,7 +67,7 @@ v1.5.6	2016-09-26 Changed Headings test to Fonts test - added a normal paragraph
 require_once('shortcode-link.php');
 require_once('shortcode-map.php');
 //require_once('shortcode-pagebreak.php');
-//require_once('shortcode-slider.php');
+require_once('shortcode-slider.php');
 require_once('shortcode-specials.php');
 
 require_once('tmhOAuth.php');
@@ -83,9 +83,9 @@ if(!function_exists('sl_theme_init')) {
 	function sl_theme_init() {
 		//remove_all_filters('image_send_to_editor');
 		add_filter('disable_captions', create_function('$a','return true;'));
-		add_filter('image_send_to_editor', 'sl_image_filter', 20, 8);
-		add_filter('media_send_to_editor', 'sl_media_filter', 20, 3);
-		add_filter('post_thumbnail_html',  'sl_thumb_filter', 20, 5);
+		//add_filter('image_send_to_editor', 'sl_image_filter', 20, 8);
+		//add_filter('media_send_to_editor', 'sl_media_filter', 20, 3);
+		//add_filter('post_thumbnail_html',  'sl_thumb_filter', 20, 5);
 	}
 	add_action('init', 'sl_theme_init', 99);
 }
@@ -437,6 +437,8 @@ function sl_media_filter($html, $id, $attachment) {
 
 function sl_thumb_filter($html, $post_id, $post_thumbnail_id, $size, $attr) {
 
+	DumpVar('sl_thumb_filter_before', $html);
+
 	$_debug = ExportVar("sl_thumb_filter", $html, $post_id, $post_thumbnail_id, $size, $attr);
 
 	if($html) {
@@ -455,7 +457,8 @@ function sl_thumb_filter($html, $post_id, $post_thumbnail_id, $size, $attr) {
 	}
 
 	//$html .= $_debug;
-
+	DumpVar('sl_thumb_filter_after', $html);
+	
 	return $html;
 }
 
@@ -1221,12 +1224,14 @@ function sl_paging_nav() {
 }
 
 function sl_load_page_script() {
-	$post_name = $GLOBALS['wp_query']->posts[0]->post_name;
-	$script_file = THEME_FOLDER . '/js/' . $post_name . '.js';
-	$script_uri = THEME_URI . '/js/' . $post_name . '.js#asyncload';
-	//DumpVar($post_name, $script_file, $script_uri);
-	if(is_page() && file_exists($script_file)) {
-		wp_enqueue_script('post-script', $script_uri, array('jquery'), '1.0');
+	if(!empty($GLOBALS['wp_query']->posts)) {
+		$post_name = $GLOBALS['wp_query']->posts[0]->post_name;
+		$script_file = THEME_FOLDER . '/js/' . $post_name . '.js';
+		$script_uri = THEME_URI . '/js/' . $post_name . '.js#asyncload';
+		//DumpVar($post_name, $script_file, $script_uri);
+		if(is_page() && file_exists($script_file)) {
+			wp_enqueue_script('post-script', $script_uri, array('jquery'), '1.0');
+		}
 	}
 }
 
